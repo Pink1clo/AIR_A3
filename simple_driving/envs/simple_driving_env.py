@@ -138,8 +138,8 @@ class SimpleDrivingEnv(gym.Env):
         self.obstacle_position = (obs_x, obs_y)
 
         # Spawn the obstacle
-        self.obstacle = self._p.loadURDF(fileName=obsticle.urdf,
-                   basePosition=[0, 0, 0])
+self.obstacle_id = self._p.loadURDF("obstacle.urdf", self.obstacle_position + (0.5,), useFixedBase=True)
+
         return np.array(car_ob, dtype=np.float32)
 
     def render(self, mode='human'):
