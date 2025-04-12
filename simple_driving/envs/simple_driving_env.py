@@ -79,12 +79,20 @@ class SimpleDrivingEnv(gym.Env):
         reward = -dist_to_goal
         self.prev_dist_to_goal = dist_to_goal
 
+        contacts = self._p.getContactPoints(self.car.car_id, self.obstacle_id)
+        if contacts:
+            reward -= 10.0  # or however strong the penalty should be
+
+        
         # Done by reaching goal
         if dist_to_goal < 1.5 and not self.reached_goal:
             #print("reached goal")
             self.done = True
             self.reached_goal = True
             reward += 50
+
+
+           
 
         ob = car_ob
         return ob, reward, self.done, dict()
