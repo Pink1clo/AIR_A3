@@ -1,5 +1,5 @@
 <?xml version="1.0"?> 
-<robot name="wall_obstacle">
+<robot name="obstacle">
 
     <!-- Colors --> 
     <material name="grey">
