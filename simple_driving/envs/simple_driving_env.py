@@ -79,20 +79,12 @@ class SimpleDrivingEnv(gym.Env):
         reward = -dist_to_goal
         self.prev_dist_to_goal = dist_to_goal
 
-        contacts = self._p.getContactPoints(self.car.car_id, self.obstacle_id)
-        if contacts:
-            reward -= 10.0  # or however strong the penalty should be
-
-        
         # Done by reaching goal
         if dist_to_goal < 1.5 and not self.reached_goal:
             #print("reached goal")
             self.done = True
             self.reached_goal = True
             reward += 50
-
-
-           
 
         ob = car_ob
         return ob, reward, self.done, dict()
@@ -128,19 +120,7 @@ class SimpleDrivingEnv(gym.Env):
         self.prev_dist_to_goal = math.sqrt(((carpos[0] - self.goal[0]) ** 2 +
                                            (carpos[1] - self.goal[1]) ** 2))
         car_ob = self.getExtendedObservation()
-
-                # Set a random obstacle position (avoid overlapping with goal)
-        while True:
-            obs_x = self.np_random.uniform(-8, 8)
-            obs_y = self.np_random.uniform(-8, 8)
-            if abs(obs_x - x) > 2 and abs(obs_y - y) > 2:
-                break
-        self.obstacle_position = (obs_x, obs_y)
-
-        # Spawn the obstacle
-        #self.obstacle_id = self._p.loadURDF("obstacle.urdf", self.obstacle_position + (0.5,), useFixedBase=True)
-
-    return np.array(car_ob, dtype=np.float32)
+        return np.array(car_ob, dtype=np.float32)
 
     def render(self, mode='human'):
         if mode == "fp_camera":
