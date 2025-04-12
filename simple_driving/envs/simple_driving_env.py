@@ -140,7 +140,7 @@ class SimpleDrivingEnv(gym.Env):
         # Spawn the obstacle
         #self.obstacle_id = self._p.loadURDF("obstacle.urdf", self.obstacle_position + (0.5,), useFixedBase=True)
 
-        return np.array(car_ob, dtype=np.float32)
+    return np.array(car_ob, dtype=np.float32)
 
     def render(self, mode='human'):
         if mode == "fp_camera":
