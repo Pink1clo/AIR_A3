@@ -120,6 +120,18 @@ class SimpleDrivingEnv(gym.Env):
         self.prev_dist_to_goal = math.sqrt(((carpos[0] - self.goal[0]) ** 2 +
                                            (carpos[1] - self.goal[1]) ** 2))
         car_ob = self.getExtendedObservation()
+
+                # Set a random obstacle position (avoid overlapping with goal)
+        while True:
+            obs_x = self.np_random.uniform(-8, 8)
+            obs_y = self.np_random.uniform(-8, 8)
+            if abs(obs_x - x) > 2 and abs(obs_y - y) > 2:
+                break
+        self.obstacle_position = (obs_x, obs_y)
+
+        # Spawn the obstacle
+        self.obstacle = self._p.loadURDF(fileName=obsticle.urdf,
+                   basePosition=[0, 0, 0])
         return np.array(car_ob, dtype=np.float32)
 
     def render(self, mode='human'):
