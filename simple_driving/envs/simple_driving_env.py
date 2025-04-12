@@ -77,6 +77,12 @@ class SimpleDrivingEnv(gym.Env):
                                   (carpos[1] - goalpos[1]) ** 2))
         # reward = max(self.prev_dist_to_goal - dist_to_goal, 0)
         reward = -dist_to_goal
+
+            # Collision penalty
+        contact_points = self._p.getContactPoints(self.car.car, self.obstacle)
+        if len(contact_points) > 0:
+            reward -= 20  # Penalty for hitting obstacle (tune as needed)
+        
         self.prev_dist_to_goal = dist_to_goal
 
         # Done by reaching goal
@@ -110,6 +116,16 @@ class SimpleDrivingEnv(gym.Env):
         self.goal = (x, y)
         self.done = False
         self.reached_goal = False
+
+        # Visual element of the goal
+        self.goal_object = Goal(self._p, self.goal)
+
+        # Load obstacle near the goal with a small offset
+        obstacle_offset = [0.5, 0.5, 0]  # You can adjust this as needed
+        obstacle_position = [self.goal[0] + obstacle_offset[0],
+                             self.goal[1] + obstacle_offset[1],
+                             obstacle_offset[2]]
+        self.obstacle = self._p.loadURDF("obsticle.urdf", basePosition=obstacle_position)
 
         # Visual element of the goal
         self.goal_object = Goal(self._p, self.goal)
